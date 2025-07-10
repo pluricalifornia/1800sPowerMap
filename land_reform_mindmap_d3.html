@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Reform Influence Mind Map - Late 1800s United States</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f5f0 0%, #e8e6e0 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .control-button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        .control-button.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        #mindmap {
+            width: 100%;
+            height: 800px;
+            border: 2px solid #8b4513;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #faf8f2 0%, #f0f0f0 100%);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .node:hover {
+            filter: brightness(1.1);
+        }
+        .node-text {
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .link {
+            fill: none;
+            stroke-width: 2;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            max-width: 300px;
+            line-height: 1.4;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .legend {
+            position: absolute;
+            top: 100px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #8b4513;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #333;
+        }
+        .insight-panel {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            background: rgba(139, 69, 19, 0.95);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            font-style: italic;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+        .highlighted {
+            stroke: #ff6b35 !important;
+            stroke-width: 4px !important;
+            opacity: 1 !important;
+        }
+        .dimmed {
+            opacity: 0.2 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Land Reform Influence Mind Map - Late 1800s United States</h1>
+        
+        <div class="controls">
+            <button class="control-button" onclick="showAllConnections()">Show All</button>
+            <button class="control-button" onclick="highlightCorporateInfluence()">Corporate Influence</button>
+            <button class="control-button" onclick="highlightResistance()">Resistance & Violence</button>
+            <button class="control-button" onclick="highlightOutcomes()">Policy Outcomes</button>
+            <button class="control-button" onclick="resetView()">Reset View</button>
+        </div>
+
+        <svg id="mindmap"></svg>
+
+        <!-- Legend -->
+        <div class="legend">
+            <h3 style="margin-top: 0; color: #2c3e50;">Node Types</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #2c3e50, #34495e);"></div>
+                <span>Corporate Capital</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #e74c3c, #c0392b);"></div>
+                <span>Resistance/Catalysts</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #8b0000, #a00000);"></div>
+                <span>White Supremacist Violence</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #ff6b6b, #ff8787);"></div>
+                <span>White Factions</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7);"></div>
+                <span>Marginalized Groups</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #3498db, #2980b9);"></div>
+                <span>Policies</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #27ae60, #229954);"></div>
+                <span>Outcomes</span>
+            </div>
+        </div>
+
+        <!-- Insight Panel -->
+        <div class="insight-panel">
+            <strong>Key Insight:</strong> The mind map reveals how corporate railroad-mining interests orchestrated the largest Indigenous land grab in American history (150M→48M acres) while the General Strike of enslaved people briefly forced consideration of Black land ownership. Both were ultimately defeated by systematic white supremacist terrorism that ended Reconstruction, then redirected "democratic" land reform toward westward expansion and racial exclusion.
+        </div>
+
+        <div class="tooltip" id="tooltip"></div>
+    </div>
+
+    <script>
+        // Data structure for the mind map
+        const data = {
+            name: "Land Reform in Late 1800s United States",
+            type: "root",
+            children: [
+                {
+                    name: "Corporate Capital",
+                    type: "corporate",
+                    children: [
+                        {
+                            name: "Railroad-Land Syndicate Complex",
+                            type: "corporate",
+                            description: "PRIMARY driving force: Chicago, Milwaukee & St. Paul Railroad targeted Sioux reservations. Corporate interests manipulated media and bought politicians like Senator Dawes. Goal: 'cut a great highway for civilization through the heart of the Sioux reserve.'"
+                        },
+                        {
+                            name: "'Humanitarian' Reformers (Corporate Cover)",
+                            type: "reform",
+                            description: "Provided ideological cover for corporate land grabbing. Byron Sunderland exposed how railroad interests used 'the officers of the Indian Rights Association' as 'active allies' - should be renamed the 'Land Shark's Rights Association.'"
+                        }
+                    ]
+                },
+                {
+                    name: "White Supremacist Violence",
+                    type: "violence",
+                    children: [
+                        {
+                            name: "Paramilitary Terror Campaign (1865-1877)",
+                            type: "violence",
+                            description: "DuBois: 'Using a technique of mass and midnight murder, the South began widely organized aggression upon the Black populace.' Armed guerrilla warfare killed thousands. 'Ten to one hundred times as many black people were killed as whites.' This terrorism forced the Compromise of 1877."
+                        },
+                        {
+                            name: "Organized Lawlessness & Terror",
+                            type: "violence", 
+                            description: "'A crime-storm of devastating fury... terror stalked abroad by day, and it burned and murdered by night. The Southern states had actually relapsed into barbarism.' This systematic violence made Reconstruction politically impossible to sustain."
+                        }
+                    ]
+                },
+                {
+                    name: "Resistance Movements",
+                    type: "resistance",
+                    children: [
+                        {
+                            name: "General Strike of the Slaves (1861-1865)",
+                            type: "resistance",
+                            description: "The largest labor strike in American history. Enslaved people abandoned plantations en masse, crippling Confederate production and forcing Union consideration of Black land ownership. DuBois called this the decisive factor that opened possibilities for democratic land redistribution."
+                        },
+                        {
+                            name: "Agrarian Reformers (Thomas Bland/NIDA)",
+                            type: "marginalized",
+                            description: "Led opposition to corporate capitalism. Bland warned against 'great corporations, whose motto is that might makes right' and saw Indigenous commons as alternative to capitalist land monopolization. Ultimately defeated by corporate-reformer alliance."
+                        }
+                    ]
+                },
+                {
+                    name: "White Factions",
+                    type: "powerful",
+                    children: [
+                        {
+                            name: "Plantation Class of South",
+                            type: "powerful",
+                            description: "Sought to preserve land holdings and political power. Temporarily weakened by slave general strike but preserved wealth through Compromise of 1877. Supported westward expansion to avoid direct challenge to property rights."
+                        },
+                        {
+                            name: "White Northern Labor Unions",
+                            type: "powerful",
+                            description: "Feared Black labor competition, supported racial exclusion. Backed 'Free Soil' but opposed abolition. DuBois noted they stressed 'difficulties of even the free laborer getting hold of the land' while excluding Black workers."
+                        },
+                        {
+                            name: "Poor, Peasant Whites",
+                            type: "powerful",
+                            description: "Migrated westward massively: 399,700 Virginians, 344,765 from Tennessee, 272,606 from North Carolina lived outside native states by 1860. Demanded exclusion of Blacks from western territories, seeing them as labor competition."
+                        }
+                    ]
+                },
+                {
+                    name: "Marginalized Groups",
+                    type: "marginalized",
+                    children: [
+                        {
+                            name: "Indigenous Nations",
+                            type: "marginalized",
+                            description: "PRIMARY TARGETS of corporate land grabbing. Controlled 150 million acres in 1887, reduced to 48 million by 1934 - 102 million acre transfer to corporate interests. Their communal landholding challenged capitalist property relations."
+                        },
+                        {
+                            name: "Enslaved Black Americans",
+                            type: "resistance",
+                            description: "Launched the General Strike that crippled Confederate production. Despite no formal political power, their collective action was the most effective challenge to the entire system, forcing consideration of Black land ownership."
+                        },
+                        {
+                            name: "Northern Black Workers",
+                            type: "marginalized",
+                            description: "Excluded from white labor organizing, faced direct competition with white workers. Had minimal political power. Racial lines made job competition 'open and visible,' preventing labor unity that might have challenged capital."
+                        }
+                    ]
+                },
+                {
+                    name: "Policy Outcomes",
+                    type: "policy",
+                    children: [
+                        {
+                            name: "Homestead Act (1862)",
+                            type: "policy",
+                            description: "Provided 160 acres to white settlers only. Satisfied multiple interests: land for poor whites, markets for corporate expansion, Indigenous dispossession. The 'safe' form of land reform avoiding existing power structures."
+                        },
+                        {
+                            name: "Southern Homestead Act (1866)",
+                            type: "policy",
+                            description: "DIRECT response to slave general strike and Black demands for land. Opened Southern public lands to freedpeople. Closest America came to genuine redistribution but systematically undermined and killed by Compromise of 1877."
+                        },
+                        {
+                            name: "Dawes Act (1887)",
+                            type: "policy",
+                            description: "Corporate masterpiece: broke up tribal commons while transferring 'surplus' land to railroad/mining interests. Senator Dawes connected to railroad interests. Agent McGillycuddy worked to 'scatter' Indian communities for corporate exploitation."
+                        },
+                        {
+                            name: "Compromise of 1877",
+                            type: "policy",
+                            description: "Ended Reconstruction under pressure from organized white supremacist terrorism. DuBois: 'Armed guerrilla warfare killed thousands of Black Americans... ten to one hundred times as many black people were killed as whites.' Final defeat of possibilities opened by slave general strike through systematic violence."
+                        }
+                    ]
+                },
+                {
+                    name: "Final Outcomes",
+                    type: "outcome",
+                    children: [
+                        {
+                            name: "150M→48M Acres: Massive Wealth Transfer",
+                            type: "outcome",
+                            description: "Largest transfer of wealth from Indigenous peoples to corporate interests in American history. Railroad companies gained rights-of-way, mining companies accessed resources, land speculators purchased vast tracts. Corporate capitalism's complete victory."
+                        },
+                        {
+                            name: "Railroad Corridors Through Reservations",
+                            type: "outcome",
+                            description: "Herbert Welsh's vision realized: transportation infrastructure for corporate expansion, resource extraction, and market integration of formerly protected territories. Not about Indian welfare but corporate profit."
+                        },
+                        {
+                            name: "Plantation System Preserved",
+                            type: "outcome",
+                            description: "Despite slave general strike's disruption, large Southern landholdings remained concentrated. Sharecropping and debt peonage replaced slavery, maintaining Black economic subjugation."
+                        },
+                        {
+                            name: "Racial Exclusion in West & Labor",
+                            type: "outcome",
+                            description: "Western territories systematically excluded Black settlers. Satisfied both Northern white workers and Southern poor whites. DuBois noted the West 'stood against that democracy in industry which might have emancipated labor.'"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Set up the SVG
+        const width = 1760;
+        const height = 800;
+        const svg = d3.select("#mindmap")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Create a group for zooming and panning
+        const g = svg.append("g");
+
+        // Add zoom behavior
+        const zoom = d3.zoom()
+            .scaleExtent([0.5, 3])
+            .on("zoom", (event) => {
+                g.attr("transform", event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Color schemes for different node types
+        const colors = {
+            root: "#8e44ad",
+            corporate: "#2c3e50",
+            resistance: "#e74c3c",
+            violence: "#8b0000", // Dark red for violence
+            powerful: "#ff6b6b",
+            marginalized: "#95a5a6",
+            reform: "#f39c12",
+            policy: "#3498db",
+            outcome: "#27ae60"
+        };
+
+        // Create hierarchical layout
+        const root = d3.hierarchy(data);
+        const treeLayout = d3.tree().size([width - 200, height - 200]);
+        treeLayout(root);
+
+        // Adjust positions for better radial layout
+        const angleStep = (2 * Math.PI) / root.children.length;
+        root.children.forEach((child, i) => {
+            const angle = i * angleStep;
+            const radius = 250;
+            child.x = width / 2 + radius * Math.cos(angle);
+            child.y = height / 2 + radius * Math.sin(angle);
+            
+            // Position grandchildren in clusters around their parents
+            if (child.children) {
+                const childAngleStep = Math.PI / (child.children.length + 1);
+                child.children.forEach((grandchild, j) => {
+                    const childAngle = angle + (j - child.children.length/2) * childAngleStep * 0.5;
+                    const childRadius = 150;
+                    grandchild.x = child.x + childRadius * Math.cos(childAngle);
+                    grandchild.y = child.y + childRadius * Math.sin(childAngle);
+                });
+            }
+        });
+
+        // Position root at center
+        root.x = width / 2;
+        root.y = height / 2;
+
+        // Create tooltip
+        const tooltip = d3.select("#tooltip");
+
+        // Draw links
+        const links = g.selectAll(".link")
+            .data(root.links())
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("d", d => {
+                return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+            })
+            .style("stroke", d => {
+                if (d.target.data.type === "resistance") return "#e74c3c";
+                if (d.target.data.type === "violence") return "#8b0000";
+                if (d.target.data.type === "corporate") return "#2c3e50";
+                if (d.target.data.type === "policy") return "#3498db";
+                return "#7f8c8d";
+            });
+
+        // Draw nodes
+        const nodes = g.selectAll(".node")
+            .data(root.descendants())
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.x},${d.y})`);
+
+        // Add circles for nodes
+        nodes.append("circle")
+            .attr("r", d => {
+                if (d.depth === 0) return 40; // Root
+                if (d.depth === 1) return 25; // Main categories
+                return 15; // Leaf nodes
+            })
+            .style("fill", d => {
+                const baseColor = colors[d.data.type] || "#7f8c8d";
+                return d.depth === 0 ? baseColor : 
+                       d.depth === 1 ? baseColor : 
+                       d3.color(baseColor).brighter(0.3);
+            })
+            .style("stroke", "#fff")
+            .style("stroke-width", "3px")
+            .style("filter", "drop-shadow(2px 2px 4px rgba(0,0,0,0.3))");
+
+        // Add text labels
+        nodes.append("text")
+            .attr("class", "node-text")
+            .attr("dy", "0.35em")
+            .style("font-size", d => {
+                if (d.depth === 0) return "14px";
+                if (d.depth === 1) return "11px";
+                return "9px";
+            })
+            .style("fill", "white")
+            .text(d => {
+                const text = d.data.name;
+                if (d.depth === 0) return text;
+                if (d.depth === 1) return text;
+                // Wrap long text for leaf nodes
+                return text.length > 20 ? text.substring(0, 18) + "..." : text;
+            });
+
+        // Add interactivity
+        nodes
+            .on("mouseover", function(event, d) {
+                if (d.data.description) {
+                    tooltip
+                        .style("opacity", 1)
+                        .html(`<strong>${d.data.name}</strong><br><br>${d.data.description}`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                }
+                
+                // Highlight connected elements
+                d3.select(this).select("circle")
+                    .style("stroke", "#ff6b35")
+                    .style("stroke-width", "5px");
+            })
+            .on("mouseout", function(event, d) {
+                tooltip.style("opacity", 0);
+                
+                d3.select(this).select("circle")
+                    .style("stroke", "#fff")
+                    .style("stroke-width", "3px");
+            })
+            .on("click", function(event, d) {
+                // Zoom to clicked node
+                const scale = 2;
+                const translate = [width/2 - scale*d.x, height/2 - scale*d.y];
+                
+                svg.transition().duration(750).call(
+                    zoom.transform,
+                    d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+                );
+            });
+
+        // Control functions
+        window.showAllConnections = function() {
+            links.classed("highlighted", false).classed("dimmed", false);
+            nodes.classed("dimmed", false);
+            document.querySelectorAll('.control-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+
+        window.highlightCorporateInfluence = function() {
+            const corporateNodes = root.descendants().filter(d => 
+                d.data.type === "corporate" || d.data.type === "reform" || 
+                d.data.name.includes("Dawes") || d.data.name.includes("Railroad")
+            );
+            
+            nodes.classed("dimmed", d => !corporateNodes.includes(d));
+            links.classed("dimmed", d => !corporateNodes.includes(d.source) && !corporateNodes.includes(d.target))
+                 .classed("highlighted", d => corporateNodes.includes(d.source) || corporateNodes.includes(d.target));
+            
+            document.querySelectorAll('.control-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+
+        window.highlightResistance = function() {
+            const resistanceNodes = root.descendants().filter(d => 
+                d.data.type === "resistance" || d.data.type === "violence" ||
+                d.data.name.includes("Strike") || d.data.name.includes("Enslaved") || 
+                d.data.name.includes("Bland") || d.data.name.includes("Terror") ||
+                d.data.name.includes("Paramilitary") || d.data.name.includes("Compromise")
+            );
+            
+            nodes.classed("dimmed", d => !resistanceNodes.includes(d));
+            links.classed("dimmed", d => !resistanceNodes.includes(d.source) && !resistanceNodes.includes(d.target))
+                 .classed("highlighted", d => resistanceNodes.includes(d.source) || resistanceNodes.includes(d.target));
+            
+            document.querySelectorAll('.control-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+
+        window.highlightOutcomes = function() {
+            const outcomeNodes = root.descendants().filter(d => 
+                d.data.type === "outcome" || d.data.type === "policy"
+            );
+            
+            nodes.classed("dimmed", d => !outcomeNodes.includes(d));
+            links.classed("dimmed", d => !outcomeNodes.includes(d.source) && !outcomeNodes.includes(d.target))
+                 .classed("highlighted", d => outcomeNodes.includes(d.source) || outcomeNodes.includes(d.target));
+            
+            document.querySelectorAll('.control-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+
+        window.resetView = function() {
+            svg.transition().duration(750).call(
+                zoom.transform,
+                d3.zoomIdentity
+            );
+            showAllConnections();
+        };
+
+        // Initial animation
+        nodes.style("opacity", 0)
+             .transition()
+             .duration(1000)
+             .delay((d, i) => i * 50)
+             .style("opacity", 1);
+
+        links.style("opacity", 0)
+             .transition()
+             .duration(1000)
+             .delay(500)
+             .style("opacity", 0.6);
+    </script>
+</body>
+</html>
