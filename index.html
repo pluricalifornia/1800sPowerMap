@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Land Reform Power Map - Late 1800s United States</title>
+    <title>Land Reform Influence Mind Map - Late 1800s United States</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <style>
         body {
@@ -140,7 +140,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Land Reform Influence Power Map - Late 1800s United States</h1>
+        <h1>Land Reform Influence Mind Map - Late 1800s United States</h1>
         
         <div class="controls">
             <button class="control-button" onclick="showAllConnections()">Show All</button>
@@ -187,7 +187,7 @@
 
         <!-- Insight Panel -->
         <div class="insight-panel">
-            <strong>Key Insight:</strong> The mind map reveals how corporate railroad-mining interests orchestrated the largest Indigenous land grab in American history (150M→48M acres) while the General Strike of enslaved people briefly forced consideration of Black land ownership. Both were ultimately defeated by systematic white supremacist terrorism that ended Reconstruction, then redirected "democratic" land reform toward westward expansion and racial exclusion.
+            <strong>Key Insight:</strong> Hoefle's data reveals westward expansion was massive speculative capitalism, not democratic homesteading. Federal government marked up land 4,900% over acquisition cost. Only 29% went through Homestead Act; 40-50% fraudulently acquired by corporations. Three-quarters of "pioneers" were speculators moving every 10 years. By 1900: 43% of rural workers were landless. The "homesteader" myth masked the largest wealth concentration scheme in American history.
         </div>
 
         <div class="tooltip" id="tooltip"></div>
@@ -207,6 +207,16 @@
                             name: "Railroad-Land Syndicate Complex",
                             type: "corporate",
                             description: "PRIMARY driving force: Chicago, Milwaukee & St. Paul Railroad targeted Sioux reservations. Corporate interests manipulated media and bought politicians like Senator Dawes. Goal: 'cut a great highway for civilization through the heart of the Sioux reserve.'"
+                        },
+                        {
+                            name: "Federal Government as Master Speculator",
+                            type: "corporate",
+                            description: "Operated largest speculative scheme: acquired land at $0.10/hectare, sold at $4.90/hectare (4,900% markup). Ohio Company got 400,000+ hectares at $0.25/hectare on credit while small buyers paid premium prices. Government was the biggest land speculator of all."
+                        },
+                        {
+                            name: "Large-Scale Land Speculators",
+                            type: "corporate",
+                            description: "Small speculators made 200-400% returns flipping land every few years. Three-quarters of 'pioneers' were actually speculators who moved every 10 years. Only 29% of federal land went through Homestead Act - rest went to speculators and corporations at massive discounts."
                         },
                         {
                             name: "'Humanitarian' Reformers (Corporate Cover)",
@@ -241,6 +251,11 @@
                             description: "The largest labor strike in American history. Enslaved people abandoned plantations en masse, crippling Confederate production and forcing Union consideration of Black land ownership. DuBois called this the decisive factor that opened possibilities for democratic land redistribution."
                         },
                         {
+                            name: "Indigenous Armed Resistance (1860s-1890s)",
+                            type: "resistance",
+                            description: "Tȟatȟáŋka Íyotake (Sitting Bull) and other leaders fought corporate land grabbing through Indian Wars. Little Bighorn (1876) temporarily halted railroad expansion. Armed resistance defended communal landholding against speculative capitalism until military defeat enabled Dawes Act implementation."
+                        },
+                        {
                             name: "Agrarian Reformers (Thomas Bland/NIDA)",
                             type: "marginalized",
                             description: "Led opposition to corporate capitalism. Bland warned against 'great corporations, whose motto is that might makes right' and saw Indigenous commons as alternative to capitalist land monopolization. Ultimately defeated by corporate-reformer alliance."
@@ -264,7 +279,7 @@
                         {
                             name: "Poor, Peasant Whites",
                             type: "powerful",
-                            description: "Migrated westward massively: 399,700 Virginians, 344,765 from Tennessee, 272,606 from North Carolina lived outside native states by 1860. Demanded exclusion of Blacks from western territories, seeing them as labor competition."
+                            description: "Migrated westward massively but most were SPECULATORS, not settlers. Three-quarters moved every 10 years seeking 200-400% returns on land flips. Few could afford $1,500 startup capital for actual farming. Most ended up as landless laborers (43% by 1900) despite 'opportunity' mythology."
                         }
                     ]
                 },
@@ -296,7 +311,7 @@
                         {
                             name: "Homestead Act (1862)",
                             type: "policy",
-                            description: "Provided 160 acres to white settlers only. Satisfied multiple interests: land for poor whites, markets for corporate expansion, Indigenous dispossession. The 'safe' form of land reform avoiding existing power structures."
+                            description: "MYTH vs REALITY: Only 29% of federal land went through Homestead Act. 40-50% of Homestead lands acquired fraudulently by corporations. Required $1,500 startup capital (4+ years wages for laborers). Railroad Act gave away best land to corporations. Only marginal land left for actual homesteaders."
                         },
                         {
                             name: "Southern Homestead Act (1866)",
@@ -320,24 +335,24 @@
                     type: "outcome",
                     children: [
                         {
-                            name: "150M→48M Acres: Massive Wealth Transfer",
+                            name: "150M→48M Acres: Indigenous Dispossession",
                             type: "outcome",
-                            description: "Largest transfer of wealth from Indigenous peoples to corporate interests in American history. Railroad companies gained rights-of-way, mining companies accessed resources, land speculators purchased vast tracts. Corporate capitalism's complete victory."
+                            description: "Largest transfer of wealth from Indigenous peoples to corporate interests in American history. Railroad companies gained rights-of-way, mining companies accessed resources, land speculators purchased vast tracts. Corporate capitalism's complete victory over indigenous commons."
                         },
                         {
-                            name: "Railroad Corridors Through Reservations",
+                            name: "Massive Wealth Concentration, Not Democracy",
                             type: "outcome",
-                            description: "Herbert Welsh's vision realized: transportation infrastructure for corporate expansion, resource extraction, and market integration of formerly protected territories. Not about Indian welfare but corporate profit."
+                            description: "By 1900: Only 22-35% of rural workforce owned land, 43% were landless laborers. In 'opportunity' zones like Northern California, richest 10% owned 56-89% of wealth, poorest 50% owned <1%. Omaha: 75% of workers remained in same class 1880-1920."
                         },
                         {
-                            name: "Plantation System Preserved",
+                            name: "Railroad Corridors & Monopolistic Exploitation",
                             type: "outcome",
-                            description: "Despite slave general strike's disruption, large Southern landholdings remained concentrated. Sharecropping and debt peonage replaced slavery, maintaining Black economic subjugation."
+                            description: "Railroad Act gave 15-60 mile deep corridors on both sides of tracks to corporations. Railroads charged 2-3x eastern freight rates. Banks charged up to 25% interest to western farmers. This systematic exploitation sparked populist movement with 'socialist overtones.'"
                         },
                         {
-                            name: "Racial Exclusion in West & Labor",
+                            name: "Speculative 'Flip & Move' Economy",
                             type: "outcome",
-                            description: "Western territories systematically excluded Black settlers. Satisfied both Northern white workers and Southern poor whites. DuBois noted the West 'stood against that democracy in industry which might have emancipated labor.'"
+                            description: "Three-quarters of 'pioneers' moved every 10 years - not permanent settlement but land speculation. Small speculators made 200-400% returns flipping land. Federal government marked up land 4,900% over acquisition cost. 'Homesteader' myth masked speculative capitalism."
                         }
                     ]
                 }
@@ -527,7 +542,9 @@
                 d.data.type === "resistance" || d.data.type === "violence" ||
                 d.data.name.includes("Strike") || d.data.name.includes("Enslaved") || 
                 d.data.name.includes("Bland") || d.data.name.includes("Terror") ||
-                d.data.name.includes("Paramilitary") || d.data.name.includes("Compromise")
+                d.data.name.includes("Paramilitary") || d.data.name.includes("Compromise") ||
+                d.data.name.includes("Indigenous") || d.data.name.includes("Sitting Bull") ||
+                d.data.name.includes("Indian Wars")
             );
             
             nodes.classed("dimmed", d => !resistanceNodes.includes(d));
